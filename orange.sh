@@ -11,13 +11,17 @@ usage() {
 usage: orange.sh <command> [<args>]
 
 commands:
-  up       start MkDocs live server
-  reload   restart MkDocs live server
-  down     stop MkDocs live server
-  logs     docker-compose logs
-  config   docker-compose config
-  ps       docker-compose ps
-  doco     docker-compose
+  up [--publish <port>]        start MkDocs live server
+  reload                       restart MkDocs live server
+  down                         stop MkDocs live server
+  logs [<args>]                docker-compose logs
+  config [--update]            docker-compose config
+  ps [<args>]                  docker-compose ps
+  doco [<args>]                docker-compose
+
+  add [--name <name>] [dir]    add a directory
+  rm name [name...]            remove directories
+  ls                           list directories
 EOF
 }
 
