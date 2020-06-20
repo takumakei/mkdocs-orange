@@ -1,0 +1,69 @@
+@media print {
+  html {
+    font-size: 9pt;
+  }
+  .md-typeset, .md-container, .md-content, .md-grid {
+    margin: 0;
+    padding: 0;
+  }
+  .md-typeset,
+  .md-typeset .admonition {
+    font-size: 1.0rem;
+  }
+  .md-typeset .codehilitetable {
+    font-size: 1.2rem;
+  } 
+  .md-typeset .codehilitetable .codehilite, 
+  .md-typeset .codehilitetable .linenodiv {
+    line-height: 1.4;
+    padding: 0.2rem 0.5rem 0.1rem;
+  }
+  .md-typeset code {
+    font-size: 1.0rem;
+    padding: 2px 4px;
+  }
+  .md-typeset h1 {
+    font-size: 2.0rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  .md-typeset h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 2rem 0 1rem 0;
+    border-bottom: 1px solid black;
+  }
+  .md-typeset h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  .md-typeset h4, .md-typeset h5, .md-typeset h6 {
+    font-size: 1.05rem;
+  }
+  .md-sidebar--primary, .md-sidebar--secondary {
+    display: none
+  }
+  .md-content {
+    margin-left: 16px;
+  }
+  .md-content * {
+    color: black;
+  }
+  .md-grid {
+    max-width: auto;
+  }
+  .md-footer {
+    display: none;
+  }
+  img {
+    width: 40%;
+  }
+  .MathJax_Display, .MathJax span {
+    font-size: 9pt;
+  }
+  .admonition::before {
+    font-size: 1.5rem;
+    left: -2.3rem;
+  }
+}

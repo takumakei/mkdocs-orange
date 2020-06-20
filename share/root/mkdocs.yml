@@ -1,0 +1,52 @@
+site_name: ORANGE
+
+theme:
+  name: material
+  language: 'ja'
+  font:
+    text: "M PLUS 1p"
+    code: "Roboto Mono"
+  custom_dir: overrides
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      linenums: True
+  - def_list
+  - fontawesome_markdown
+  - footnotes
+  - mdx_truly_sane_lists:
+      nested_indent: 2
+  - mdx_unimoji
+  - nl2br
+  - plantuml_markdown:
+      server: "http://plantuml:8080"
+      format: svg
+  - pymdownx.arithmatex
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.keys
+  - pymdownx.magiclink
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: True
+  - smarty
+  - toc:
+      permalink: True
+
+extra_css:
+  - assets/stylesheets/custom.style.css
+  - assets/stylesheets/custom.print.css
+  - "https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+  - "https://fonts.googleapis.com/css?family=M+PLUS+1p"
+  - "https://fonts.googleapis.com/css?family=Roboto+Mono"
+
+extra_javascript:
+  - "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+
+plugins:
+  - search
+  - awesome-pages
+  - minify:
+      minify_html: true
