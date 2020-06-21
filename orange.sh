@@ -225,7 +225,7 @@ services:
     image: plantuml/plantuml-server@sha256:8453c140841810be800904dafa994fdc0c8b705e74bdcfbd7546d47a1e1f622c
 
   mkdocs:
-    image: takumakei/mkdocs-material:5.2.2
+    image: takumakei/mkdocs-material:5.3.2
     working_dir: /work
     ports:
       - $publ:$port
