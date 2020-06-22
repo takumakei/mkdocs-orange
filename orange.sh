@@ -22,6 +22,7 @@ commands:
   add [--name <name>] [dir]    add a directory
   rm name [name...]            remove directories
   ls                           list directories
+  skip [--unset] <name...>     set/unset skip
 EOF
 }
 
@@ -151,9 +152,9 @@ main_add() {
     exit 127
   fi
 
-  local next="$(echo "$prev" | jq '.+{"targets":'"$(_add_target "$src" "$dst")"'}')"
-  echo "$next" >"$ORANGE_CONFIG"
+  local next="$(echo "$prev" | jq '. + {targets: (.targets + [{src:"'"$src"'", dst:"'"$dst"'"}])}')"
   if [[ "$prev" != "$next" ]]; then
+    echo "$next" >"$ORANGE_CONFIG"
     main_reload
   fi
 }
@@ -167,26 +168,82 @@ main_rm() {
 }
 
 _main_rm() {
-  local prev="$(cat "$ORANGE_CONFIG")"
-  local next="$prev"
-  for i in "$@"; do
-    next="$(echo "$next" | jq '[.targets[]|select(.dst!="'"$i"'")]')"
-    next="$(jq '.+{"targets":'"$next"'}' "$ORANGE_CONFIG")"
+  local args="\"$1\""
+  shift
+  while [[ $# -ne 0 ]]; do
+    args="$args,\"$1\""
+    shift
   done
 
-  echo "$next" >"$ORANGE_CONFIG"
+  local prev="$(cat "$ORANGE_CONFIG")"
+  local next="$(echo "$prev" | jq '. + {targets: .targets|map(select(.dst | IN('"$args"') | not))}')"
   if [[ "$prev" != "$next" ]]; then
+    echo "$next" >"$ORANGE_CONFIG"
     main_reload
   fi
 }
 
 main_ls() {
-  jq -r '.targets[]|.dst+" -> "+.src' "$ORANGE_CONFIG"
+  jq -r '.targets[] | .dst + (if .skip == true then " (skip)" else "" end) + " -> " + .src' "$ORANGE_CONFIG"
 }
 
-_add_target() {
-  local src="$1" dst="$2"
-  jq '[.targets[]]+[{"src":"'"$src"'","dst":"'"$dst"'"}]' "$ORANGE_CONFIG"
+main_skip() {
+  local args=() del=
+  while [[ $# -ne 0 ]]; do
+    local opt="$1"
+    shift
+    case "$opt" in
+      -u | --unset)
+        del=true
+        ;;
+      -*)
+        exit 1
+        ;;
+      *)
+        args+=("$opt")
+        ;;
+    esac
+  done
+  [[ ${#args[@]} -eq 0 ]] && return
+  set -- "${args[@]}"
+
+  if [[ -z "$del" ]]; then
+    _main_skip "$@"
+  else
+    _main_skip_del "$@"
+  fi
+}
+
+_main_skip() {
+  local args="\"$1\""
+  shift
+  while [[ $# -ne 0 ]]; do
+    args="$args, \"$1\""
+    shift
+  done
+
+  local prev="$(cat "$ORANGE_CONFIG")"
+  local next="$(echo "$prev" | jq '. + {targets: .targets|map(if .dst | IN('"$args"') then . + {skip:true} else . end)}')"
+  if [[ "$prev" != "$next" ]]; then
+    echo "$next" >"$ORANGE_CONFIG"
+    main_reload
+  fi
+}
+
+_main_skip_del() {
+  local args="\"$1\""
+  shift
+  while [[ $# -ne 0 ]]; do
+    args="$args, \"$1\""
+    shift
+  done
+
+  local prev="$(cat "$ORANGE_CONFIG")"
+  local next="$(echo "$prev" | jq '. + {targets: .targets|map(if .dst | IN('"$args"') then del(.skip) else . end)}')"
+  if [[ "$prev" != "$next" ]]; then
+    echo "$next" >"$ORANGE_CONFIG"
+    main_reload
+  fi
 }
 
 _doco_up() {
@@ -236,10 +293,7 @@ services:
     volumes:
       - "$ORANGE_DATA/root:/work"
 EOF
-
-  while read -r line; do
-    echo "      - $line"
-  done < <(echo "$json" | jq -r '.targets[]|select(.skip!=true)|.src+":/work/docs/"+.dst')
+  echo "$json" | jq -r '.targets[]|select(.skip | not) | "      - " + .src + ":/work/docs/" + .dst + ":ro"'
 }
 
 main "$@"
