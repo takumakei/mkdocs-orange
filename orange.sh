@@ -7,7 +7,7 @@ ORANGE_CONFIG="$ORANGE_DATA/config.json"
 ORANGE_DOCO_YML="$ORANGE_DATA/docker-compose.yml"
 
 usage() {
-  cat <<EOF 1>&2
+  cat <<EOF
 usage: orange.sh <command> [<args>]
 
 commands:
@@ -27,19 +27,30 @@ EOF
 }
 
 main() {
-  local cmd=
-  if [[ $# -gt 0 ]]; then
-    cmd="$1"
-    shift
+  if [[ $# -eq 0 ]]; then
+    usage
+    exit
   fi
 
+  local cmd="$1"
+  shift
   local run="main_$cmd"
   if [[ "$(type -t "$run")" == function ]]; then
     "$run" "$@"
   else
-    [[ "$cmd" != "" ]] && echo "error: command '$cmd' not found" 1>&2
-    usage "$@"
+    fatal -u "command '$cmd' not found"
   fi
+}
+
+fatal() {
+  if [[ "$1" == "-u" ]]; then
+    shift
+    echo "error: $*" 1>&2
+    usage 1>&2
+  else
+    echo "error: $*" 1>&2
+  fi
+  exit 1
 }
 
 main_config() {
@@ -52,8 +63,7 @@ main_config() {
         update=true
         ;;
       -*)
-        echo "error: unknown flag '$opt'" 1>&2
-        exit 1
+        fatal "error: unknown flag '$opt'"
         ;;
     esac
   done
@@ -135,8 +145,7 @@ main_add() {
     src="$PWD/$src"
   fi
   if [[ ! -d "$src" ]]; then
-    echo "error: not found $src"
-    exit 1
+    fatal "error: not found '$src'"
   fi
   pushd "$src" >/dev/null
   src="$(pwd)"
@@ -148,8 +157,7 @@ main_add() {
 
   local prev="$(cat "$ORANGE_CONFIG")"
   if [[ $(echo "$prev" | jq '[.targets[]|select(.dst=="'"$dst"'")]|length') -ne 0 ]]; then
-    echo "error: name already exists '$dst'"
-    exit 127
+    fatal "error: name already exists '$dst'"
   fi
 
   local next="$(echo "$prev" | jq '. + {targets: (.targets + [{src:"'"$src"'", dst:"'"$dst"'"}])}')"
