@@ -265,8 +265,8 @@ _update_doco_config() {
 
 _cat_doco_config() {
   local json="$(cat "$ORANGE_CONFIG")"
-  local publ="$(echo "$json" | jq -r ".publish")"
-  if [[ "$publ" == "null" ]]; then
+  local publ="$(echo "$json" | jq -r '.publish // ""')"
+  if [[ -z "$publ" ]]; then
     publ="127.0.0.1:8000"
   fi
   local port="$publ"
@@ -280,6 +280,17 @@ version: '3'
 services:
   plantuml:
     image: plantuml/plantuml-server@sha256:8453c140841810be800904dafa994fdc0c8b705e74bdcfbd7546d47a1e1f622c
+EOF
+
+  local puml="$(echo "$json" | jq -r '.plantuml // ""')"
+  if [[ -n "$puml" ]]; then
+    cat <<EOF
+    ports:
+      - $puml:8080
+EOF
+  fi
+
+  cat <<EOF
 
   mkdocs:
     image: takumakei/mkdocs-material:5.3.2
