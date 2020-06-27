@@ -112,7 +112,7 @@ main_doco() {
 }
 
 main_add() {
-  local src="$PWD" dst
+  local src="$PWD" dst=
   while [[ $# -ne 0 ]]; do
     local opt="$1"
     shift
