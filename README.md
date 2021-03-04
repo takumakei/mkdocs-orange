@@ -29,7 +29,7 @@ commands:
   add [--name <name>] [dir]
                        dirをnameとしてマウントする
                        dirを指定しない場合はカレントディレクトリを追加する
-                       nameを指定しない場合はdirname dirの結果をnameにする
+                       nameを指定しない場合はbasename dirの結果をnameにする
   rm name [name...]
                        nameをアンマウントする
   ls
