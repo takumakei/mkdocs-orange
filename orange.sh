@@ -104,6 +104,7 @@ version: '3'
 services:
   plantuml:
     image: $ORANGE_PLANTUML
+    restart: unless-stopped
     labels:
       io.github.takumakei.project: ornage.sh
       io.github.takumakei.project.orange.role: plantuml
@@ -121,6 +122,7 @@ EOF
 
   mkdocs:
     image: $ORANGE_MKDOCS
+    restart: unless-stopped
     labels:
       io.github.takumakei.project: ornage.sh
       io.github.takumakei.project.orange.role: mkdocs
