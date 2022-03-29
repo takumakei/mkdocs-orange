@@ -6,8 +6,8 @@ set -o pipefail
 : ${ORANGE_CONFIG:=$ORANGE_DATA/config.json}
 : ${ORANGE_DOCO_YML:=$ORANGE_DATA/docker-compose.yml}
 : ${ORANGE_TEMPLATE:=https://raw.githubusercontent.com/takumakei/mkdocs-orange/trunk/share}
-: ${ORANGE_PLANTUML:=plantuml/plantuml-server@sha256:8453c140841810be800904dafa994fdc0c8b705e74bdcfbd7546d47a1e1f622c}
-: ${ORANGE_MKDOCS:=takumakei/mkdocs-material:5.3.2}
+: ${ORANGE_PLANTUML:=plantuml/plantuml-server:v1.2022.2}
+: ${ORANGE_MKDOCS:=takumakei/mkdocs-material:5.3.2-2}
 
 main() {
   if [[ $# -eq 0 ]]; then

@@ -50,3 +50,4 @@ plugins:
   - awesome-pages
   - minify:
       minify_html: true
+  - include-markdown
