@@ -7,7 +7,7 @@ set -o pipefail
 : ${ORANGE_DOCO_YML:=$ORANGE_DATA/docker-compose.yml}
 : ${ORANGE_TEMPLATE:=https://raw.githubusercontent.com/takumakei/mkdocs-orange/trunk/share}
 : ${ORANGE_PLANTUML:=plantuml/plantuml-server:v1.2022.2}
-: ${ORANGE_MKDOCS:=takumakei/mkdocs-material:8.2.8}
+: ${ORANGE_MKDOCS:=takumakei/mkdocs-material:5.3.2-2}
 
 main() {
   if [[ $# -eq 0 ]]; then
@@ -46,13 +46,13 @@ commands:
   ls
   skip [--unset] name [name...]
 
-  up                   docker-compose up を実行する
-  reload               docker-compose down して up を実行する
-  down                 docker-compose up を実行する
-  config [--update]    docker-compose config を実行する
-  logs                 docker-compose logs を実行する
-  ps                   docker-compose ps を実行する
-  doco                 docker-compose を実行する
+  up                   docker compose up を実行する
+  reload               docker compose down して up を実行する
+  down                 docker compose up を実行する
+  config [--update]    docker compose config を実行する
+  logs                 docker compose logs を実行する
+  ps                   docker compose ps を実行する
+  doco                 docker compose を実行する
 
   mkdocs [addr:]port
                        mkdocsのlistenアドレス/ポートを設定する
@@ -64,7 +64,7 @@ EOF
 }
 
 _init() {
-  for i in docker docker-compose jq curl; do
+  for i in docker jq curl; do
     if ! which "$i" 2>&1 >/dev/null; then
       _error "command not found: $i"
     fi
@@ -99,8 +99,6 @@ _gen_doco_config() {
   [[ ! "$publ" =~ ^[^:]*:(.*) ]] || port="${BASH_REMATCH[1]}"
 
   cat <<EOF
-version: '3'
-
 services:
   plantuml:
     image: $ORANGE_PLANTUML
@@ -319,7 +317,7 @@ _main_ps() {
 }
 
 _main_doco() {
-  docker-compose -p orange -f "$ORANGE_DOCO_YML" "$@"
+  docker compose -p orange -f "$ORANGE_DOCO_YML" "$@"
 }
 
 _main_mkdocs() {
