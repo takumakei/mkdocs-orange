@@ -296,7 +296,7 @@ _main_config() {
         update=true
         ;;
       *)
-        _error "unknown option: $opt"
+        _error "unknown option: $i"
         ;;
     esac
   done
