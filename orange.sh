@@ -5,7 +5,7 @@ set -o pipefail
 : ${ORANGE_DATA:=${XDG_DATA_HOME:=$HOME/.local/share}/orange}
 : ${ORANGE_CONFIG:=$ORANGE_DATA/config.json}
 : ${ORANGE_DOCO_YML:=$ORANGE_DATA/docker-compose.yml}
-: ${ORANGE_TEMPLATE:=https://raw.githubusercontent.com/takumakei/mkdocs-orange/trunk/share}
+: ${ORANGE_TEMPLATE:=https://raw.githubusercontent.com/takumakei/mkdocs-orange/main/share}
 : ${ORANGE_PLANTUML:=plantuml/plantuml-server:v1.2024.6}
 : ${ORANGE_MKDOCS:=takumakei/mkdocs-material:9.5.25-0}
 
