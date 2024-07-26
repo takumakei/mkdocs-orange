@@ -7,13 +7,15 @@ theme:
     text: "M PLUS 1p"
     code: "Roboto Mono"
   custom_dir: overrides
+  features:
+    - content.code.copy
 
 markdown_extensions:
+  - attr_list
   - admonition
   - codehilite:
       linenums: True
   - def_list
-  - fontawesome_markdown
   - footnotes
   - mdx_truly_sane_lists:
       nested_indent: 2
@@ -24,13 +26,19 @@ markdown_extensions:
       format: svg
   - pymdownx.arithmatex
   - pymdownx.emoji:
-      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.keys
   - pymdownx.magiclink
   - pymdownx.smartsymbols
   - pymdownx.tabbed
   - pymdownx.tasklist:
       custom_checkbox: True
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - smarty
   - toc:
       permalink: True
@@ -38,7 +46,6 @@ markdown_extensions:
 extra_css:
   - assets/stylesheets/custom.style.css
   - assets/stylesheets/custom.print.css
-  - "https://use.fontawesome.com/releases/v5.13.0/css/all.css"
   - "https://fonts.googleapis.com/css?family=M+PLUS+1p"
   - "https://fonts.googleapis.com/css?family=Roboto+Mono"
 
